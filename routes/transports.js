@@ -23,28 +23,21 @@ router.get('/', function(req, res, next) {
     if (error) throw error;
     buses = result;
 
-    res.json({buses})
-    // buses.push({num: 21, directionOne: 9, directionTwo: 2, id: 7, type: 0})
+    // res.json({buses})
 });
 
 pool.query('SELECT * FROM cars WHERE type = 1', (error, result) => {
     if (error) throw error;
     trams = result;
-
-    // res.json({trams})
-    console.log('tut')
 });
 
 pool.query('SELECT * FROM cars WHERE type = 2', (error, result) => {
     if (error) throw error;
     trolleys = result;
-
-    // res.json({trolleys})
 });
 // console.log(buses)
 
-// pool.end();
-//   res.json( {trolleys, trams, buses});
+  res.json( {trolleys, trams, buses});
 
 });
 
