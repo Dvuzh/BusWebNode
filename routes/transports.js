@@ -8,36 +8,71 @@ var express = require('express');
 var router = express.Router();
 
 // Load the MySQL pool connection
-const pool = require('../data/config');
+const sequelize = require('../data/config');
 
-/* GET users listing. */
-router.get('/', function(req, res, next) {
-    let buses = [];
+router.get('/', function (req, res, next) {
+    let buses = [{
+        num: 1,
+        directionOne: 5,
+        directionTwo: 2,
+        id: 1,
+        type: 0
+    }];
     let trams = [];
-    let trolleys = [];
-	// Comment out this line:
-  //res.send('respond with a resource');
+    let trolleys = []; 
 
-  // And insert something like this instead:
- pool.query('SELECT * FROM cars WHERE type = 0', (error, result) => {
-    if (error) throw error;
-    buses = result;
+    const Cars = sequelize.define('cars', {}, {
+        tableName: 'cars'
+    });
 
-    // res.json({buses})
-});
+    Cars.findAll({
+            attributes: ['id', 'num', 'directionOne', 'directionTwo', 'type'],
+            where: {
+                type: 0
+            }
+        })
+        .then(myTableRows => {
+            const jsonString = JSON.stringify(myTableRows);
+            const obj = JSON.parse(jsonString);
 
-pool.query('SELECT * FROM cars WHERE type = 1', (error, result) => {
-    if (error) throw error;
-    trams = result;
-});
 
-pool.query('SELECT * FROM cars WHERE type = 2', (error, result) => {
-    if (error) throw error;
-    trolleys = result;
-});
-// console.log(buses)
+            var arrayOfPromises = obj.map(function (row) {
+                console.log(row)
+                return buses.push(row);
+              });
+              console.log(arrayOfPromises)
+              return Promise.all(arrayOfPromises);
+return buses;
 
-  res.json( {trolleys, trams, buses});
+            // obj.forEach(item => {
+            //     buses.push(item);
+            //     // console.log(item);
+            // });
+            // console.log(buses)
+        });
+
+    console.log(buses)
+
+
+    // And insert something like this instead:
+    //  pool.query('SELECT * FROM cars WHERE type = 0', (error, result) => {
+    //     if (error) throw error;
+    //     buses = result;
+
+    //     // res.json({buses})
+    // });
+
+    // pool.query('SELECT * FROM cars WHERE type = 1', (error, result) => {
+    //     if (error) throw error;
+    //     trams = result;
+    // });
+
+    // pool.query('SELECT * FROM cars WHERE type = 2', (error, result) => {
+    //     if (error) throw error;
+    //     trolleys = result;
+    // });
+
+    res.json({ trolleys, trams, buses});
 
 });
 
