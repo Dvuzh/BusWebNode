@@ -1,43 +1,29 @@
+var express = require('express');
+var router = express.Router();
 const fetch = require('node-fetch');
 
-module.exports = (app) => {
+router.get('/search-location-weather', (req, res) => {
+	const baseUrl = 'http://api.openweathermap.org/data/2.5/weather?q=Omsk,Ru';
+	const apiId = '&appid=b41984b8b5135f1695c5faac30990138&units=metric';	
 
-	let zipcode;
+	const userLocation = (baseUrl, apiId) => {
+		let newUrl = baseUrl + apiId;
+		return newUrl;
+	};
 
-	app.post('/search-location', (req, res) => {
+	const apiUrl = userLocation(baseUrl, apiId);
 
-		zipcode = req.body.zipcode;
-
-		if(!zipcode || zipcode.length < 5 || zipcode.length > 5) {
-			res.redirect('/error');
-		} else { 
-			res.redirect('/current-weather');
-		}
-	})
-
-	app.get('/search-location-weather', (req, res) => {
-		//build api URL with user zip
-		const baseUrl = 'http://api.openweathermap.org/data/2.5/weather?zip=';	
-		const apiId = '&appid=<YOUR API KEY GOES HERE>&units=imperial';
-
-		const userLocation = (url1, url2, zipcode) => {
-
-		   let newUrl = url1 + zipcode + url2;
-		   return newUrl;
-		};	
-
-		const apiUrl = userLocation(baseUrl, apiId, zipcode);
-
-
-		fetch(apiUrl)
+	fetch(apiUrl)
 		.then(res => res.json())
-		.then(data => {
-			res.send({ data });
+		.then(temperature => {
+			res.send({
+				temperature
+			});
 		})
 		.catch(err => {
 			res.redirect('/error');
 		});
 
-	})
+});
 
-}
+module.exports = router;
