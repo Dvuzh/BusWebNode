@@ -1,5 +1,6 @@
 var express = require('express');
 var router = express.Router();
+const fetch = require('node-fetch');
 
 // Load the MySQL pool connection
 const sequelize = require('../data/config');
@@ -78,5 +79,41 @@ router.post('/?:id', function (req, res, next) {
         res.json({car});
     });
 });
+
+
+
+router.get('/position', (req, res) => {
+	const baseUrl = 'http://api.your-bus.ru/position?id=105';
+
+	fetch(baseUrl)
+		.then(result => result.json())
+		.then((result) => {
+            res.json(result);
+		})
+		.catch(err => {
+            console.log('tut')
+			// res.redirect('/error');
+		});
+
+});
+
+router.get('/route-transport', (req, res) => {
+	const baseUrl = 'http://api.your-bus.ru/route?id=105';
+
+	fetch(baseUrl)
+		.then(result => result.json())
+		.then((result) => {
+            res.json(result);
+		})
+		.catch(err => {
+            console.log('tut')
+			// res.redirect('/error');
+		});
+
+});
+
+//route?id=105
+
+
 
 module.exports = router;
