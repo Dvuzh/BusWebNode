@@ -82,8 +82,8 @@ router.post('/?:id', function (req, res, next) {
 
 
 
-router.get('/position', (req, res) => {
-	const baseUrl = 'http://api.your-bus.ru/position?id=105';
+router.get('/position/?:transportId', (req, res) => {
+	const baseUrl = 'http://api.your-bus.ru/position?id=' + req.params.transportId;
 
 	fetch(baseUrl)
 		.then(result => result.json())
@@ -97,8 +97,8 @@ router.get('/position', (req, res) => {
 
 });
 
-router.get('/route-transport', (req, res) => {
-	const baseUrl = 'http://api.your-bus.ru/route?id=105';
+router.get('/route-transport/?:transportId', (req, res) => {
+	const baseUrl = 'http://api.your-bus.ru/route?id='+ req.params.transportId;
 
 	fetch(baseUrl)
 		.then(result => result.json())
