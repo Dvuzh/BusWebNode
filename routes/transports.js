@@ -8,6 +8,8 @@ const Cars = sequelize.define('cars', {}, {
     tableName: 'cars'
 });
 
+let carsId = [];
+
 router.get('/buses', function (req, res, next) {
     let buses = [];
 
@@ -73,42 +75,77 @@ router.get('/amount', function (req, res, next) {
     });
 });
 
-router.post('/?:id', function (req, res, next) {    
-    Cars.findByPk(req.params.id,{attributes: ['id', 'num', 'directionOne', 'directionTwo', 'type']}).then(result => {       
+router.post('/?:id', function (req, res, next) {
+    Cars.findByPk(req.params.id, {
+        attributes: ['id', 'num', 'directionOne', 'directionTwo', 'type']
+    }).then(result => {
         const car = result.dataValues;
-        res.json({car});
+        res.json({
+            car
+        });
     });
 });
 
+function putCarsId() {
+    if (carsId.length === 0) {
+        Cars.findAll({
+            attributes: ['id']
+        }).then(result => {
+            const obj = JSON.parse(JSON.stringify(result));
+            obj.map(elem => carsId.push(elem.id));
+        });
+    }
+}
 
+const makeRequest = async () => {
+    return await putCarsId();
+}
+
+router.get('/countall', (req, res) => {
+    const baseUrl = 'http://api.your-bus.ru/route?id=3&d=countall';
+
+    makeRequest();
+
+    fetch(baseUrl)
+        .then(result => result.json())
+        .then((result) => {
+            const filteredResult = result.countall.filter(elem => carsId.includes(parseInt(elem.id)));
+            res.json(filteredResult);
+        })
+        .catch(err => {
+            console.log('tut3')
+            // res.redirect('/error');
+        });
+
+});
 
 router.get('/position/?:transportId', (req, res) => {
-	const baseUrl = 'http://api.your-bus.ru/position?id=' + req.params.transportId;
+    const baseUrl = 'http://api.your-bus.ru/position?id=' + req.params.transportId;
 
-	fetch(baseUrl)
-		.then(result => result.json())
-		.then((result) => {
+    fetch(baseUrl)
+        .then(result => result.json())
+        .then((result) => {
             res.json(result);
-		})
-		.catch(err => {
+        })
+        .catch(err => {
             console.log('tut')
-			// res.redirect('/error');
-		});
+            // res.redirect('/error');
+        });
 
 });
 
 router.get('/route-transport/?:transportId', (req, res) => {
-	const baseUrl = 'http://api.your-bus.ru/route?id='+ req.params.transportId;
+    const baseUrl = 'http://api.your-bus.ru/route?id=' + req.params.transportId;
 
-	fetch(baseUrl)
-		.then(result => result.json())
-		.then((result) => {
+    fetch(baseUrl)
+        .then(result => result.json())
+        .then((result) => {
             res.json(result);
-		})
-		.catch(err => {
+        })
+        .catch(err => {
             console.log('tut')
-			// res.redirect('/error');
-		});
+            // res.redirect('/error');
+        });
 
 });
 
