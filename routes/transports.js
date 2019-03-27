@@ -4,16 +4,15 @@ const fetch = require('node-fetch');
 
 // Load the MySQL pool connection
 const sequelize = require('../data/config');
-const Cars = sequelize.define('cars', {}, {
-    tableName: 'cars'
-});
+
+const Transport = sequelize.import("../models/transport")
 
 let carsId = [];
 
 router.get('/buses', function (req, res, next) {
     let buses = [];
 
-    Cars.findAll({
+    Transport.findAll({
             attributes: ['id', 'num', 'directionOne', 'directionTwo', 'type'],
             where: {
                 type: 0
@@ -31,7 +30,7 @@ router.get('/buses', function (req, res, next) {
 router.get('/trams', function (req, res, next) {
     let trams = [];
 
-    Cars.findAll({
+    Transport.findAll({
             attributes: ['id', 'num', 'directionOne', 'directionTwo', 'type'],
             where: {
                 type: 1
@@ -49,7 +48,7 @@ router.get('/trams', function (req, res, next) {
 router.get('/trolleys', function (req, res, next) {
     let trolleys = [];
 
-    Cars.findAll({
+    Transport.findAll({
             attributes: ['id', 'num', 'directionOne', 'directionTwo', 'type'],
             where: {
                 type: 2
@@ -65,8 +64,8 @@ router.get('/trolleys', function (req, res, next) {
 });
 
 router.get('/amount', function (req, res, next) {
-    Cars.sum('directionOne').then(amountDirectionOne => {
-        Cars.sum('directionTwo').then(amountDirectionTwo => {
+    Transport.sum('directionOne').then(amountDirectionOne => {
+        Transport.sum('directionTwo').then(amountDirectionTwo => {
             const amountTransposrt = amountDirectionOne + amountDirectionTwo;
             res.json({
                 amountTransposrt
@@ -76,7 +75,21 @@ router.get('/amount', function (req, res, next) {
 });
 
 router.post('/?:id', function (req, res, next) {
-    Cars.findByPk(req.params.id, {
+    // let arr =[]; document.querySelectorAll(".styled-list.style1 li h4").forEach(item => arr.push(item.innerText)); console.log(arr)
+    // const baseUrl = 'http://api.your-bus.ru/route?id=108';
+    // fetch(baseUrl)
+    // // .then(result => result.json())
+    // .then((result) => {
+    //     console.log(result)
+    //     // const filteredResult = result.countall.filter(elem => carsId.includes(parseInt(elem.id)));
+    //     // res.json(filteredResult);
+    // })
+    // .catch(err => {
+    //     console.log('tut3')
+    //     // res.redirect('/error');
+    // });
+
+    Transport.findByPk(req.params.id, {
         attributes: ['id', 'num', 'directionOne', 'directionTwo', 'type']
     }).then(result => {
         const car = result.dataValues;
@@ -88,7 +101,7 @@ router.post('/?:id', function (req, res, next) {
 
 function putCarsId() {
     if (carsId.length === 0) {
-        Cars.findAll({
+        Transport.findAll({
             attributes: ['id']
         }).then(result => {
             const obj = JSON.parse(JSON.stringify(result));

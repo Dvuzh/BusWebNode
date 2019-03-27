@@ -16,7 +16,7 @@
 
 
 const Sequelize = require('sequelize');
-const sequelize = new Sequelize('buses', 'test', 'nokia12nokia', {
+const sequelize = new Sequelize('buses', 'phpmyadmin', '123', {
   host: 'localhost',
   dialect: 'mysql',
   operatorsAliases: false,
