@@ -6,6 +6,7 @@ const fetch = require('node-fetch');
 const sequelize = require('../data/config');
 
 const Transport = sequelize.import("../models/transport")
+const Route = sequelize.import("../models/route")
 
 let carsId = [];
 
@@ -89,13 +90,33 @@ router.post('/?:id', function (req, res, next) {
     //     // res.redirect('/error');
     // });
 
+    // console.log(Transport.findByPk(req.params.id, {
+    //     attributes: ['id', 'num', 'directionOne', 'directionTwo', 'type']
+    // }).getTransportStations())
+    
+
     Transport.findByPk(req.params.id, {
-        attributes: ['id', 'num', 'directionOne', 'directionTwo', 'type']
-    }).then(result => {
-        const car = result.dataValues;
+        attributes: ['id', 'num', 'directionOne', 'directionTwo', 'type'],
+        // include: [
+        //     {
+        //       model: Route,
+        //       attributes: [['id','arrayStations']],
+        //     }
+        // ]
+    }).then((result) => {
+        result.getRoute().then((item)=>{
+            // ticket['category'] = category;
+            // res.json(ticket);
+
+
+            console.log(item)
+        const car = item.dataValues;
         res.json({
             car
         });
+        });
+
+        
     });
 });
 
