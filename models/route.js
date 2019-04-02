@@ -4,10 +4,15 @@ module.exports = (sequelize, DataTypes) => {
     transportId: DataTypes.INTEGER,
     stationId: DataTypes.INTEGER,
     number: DataTypes.INTEGER
-  }, {});
-  Route.associate = function(models) {
-    // associations can be defined here
-    // TransportStations.belongsTo(models.Transport, {foreignKey: 'id_transport' });
+  }, {
+    tableName:'Routes',
+    timestamps: false
+  });
+  
+  Route.associate = (models) => {
+    // Route.belongsTo(models.Transport,{foreignKey: 'transportId'});
+
+    Route.belongsTo(models.Station);
   };
   return Route;
 };

@@ -5,8 +5,9 @@ const fetch = require('node-fetch');
 // Load the MySQL pool connection
 const sequelize = require('../data/config');
 
-const Transport = sequelize.import("../models/transport")
-const Route = sequelize.import("../models/route")
+const models = require("../models");
+const Transport = models.Transport;
+const Route = models.Route;
 
 let carsId = [];
 
@@ -14,11 +15,11 @@ router.get('/buses', function (req, res, next) {
     let buses = [];
 
     Transport.findAll({
-            attributes: ['id', 'num', 'directionOne', 'directionTwo', 'type'],
-            where: {
-                type: 0
-            }
-        })
+        attributes: ['id', 'num', 'directionOne', 'directionTwo', 'type'],
+        where: {
+            type: 0
+        }
+    })
         .then(myTableRows => {
             const obj = JSON.parse(JSON.stringify(myTableRows));
             obj.map(row => buses.push(row));
@@ -32,11 +33,11 @@ router.get('/trams', function (req, res, next) {
     let trams = [];
 
     Transport.findAll({
-            attributes: ['id', 'num', 'directionOne', 'directionTwo', 'type'],
-            where: {
-                type: 1
-            }
-        })
+        attributes: ['id', 'num', 'directionOne', 'directionTwo', 'type'],
+        where: {
+            type: 1
+        }
+    })
         .then(myTableRows => {
             const obj = JSON.parse(JSON.stringify(myTableRows));
             obj.map(row => trams.push(row));
@@ -50,11 +51,11 @@ router.get('/trolleys', function (req, res, next) {
     let trolleys = [];
 
     Transport.findAll({
-            attributes: ['id', 'num', 'directionOne', 'directionTwo', 'type'],
-            where: {
-                type: 2
-            }
-        })
+        attributes: ['id', 'num', 'directionOne', 'directionTwo', 'type'],
+        where: {
+            type: 2
+        }
+    })
         .then(myTableRows => {
             const obj = JSON.parse(JSON.stringify(myTableRows));
             obj.map(row => trolleys.push(row));
@@ -76,48 +77,37 @@ router.get('/amount', function (req, res, next) {
 });
 
 router.post('/?:id', function (req, res, next) {
-    // let arr =[]; document.querySelectorAll(".styled-list.style1 li h4").forEach(item => arr.push(item.innerText)); console.log(arr)
-    // const baseUrl = 'http://api.your-bus.ru/route?id=108';
-    // fetch(baseUrl)
-    // // .then(result => result.json())
-    // .then((result) => {
-    //     console.log(result)
-    //     // const filteredResult = result.countall.filter(elem => carsId.includes(parseInt(elem.id)));
-    //     // res.json(filteredResult);
-    // })
-    // .catch(err => {
-    //     console.log('tut3')
-    //     // res.redirect('/error');
-    // });
 
-    // console.log(Transport.findByPk(req.params.id, {
-    //     attributes: ['id', 'num', 'directionOne', 'directionTwo', 'type']
-    // }).getTransportStations())
-    
-
-    Transport.findByPk(req.params.id, {
-        attributes: ['id', 'num', 'directionOne', 'directionTwo', 'type'],
-        // include: [
-        //     {
-        //       model: Route,
-        //       attributes: [['id','arrayStations']],
-        //     }
-        // ]
-    }).then((result) => {
-        result.getRoute().then((item)=>{
-            // ticket['category'] = category;
-            // res.json(ticket);
-
-
-            console.log(item)
-        const car = item.dataValues;
+    models.Transport.findByPk(req.params.id).then((result) => {
+        const car = result.dataValues;
         res.json({
             car
         });
-        });
-
-        
     });
+});
+
+router.get('/get-stations/?:id', function (req, res) {
+    models.Transport.findByPk(req.params.id, {
+        include: [{
+            model: models.Route,
+            include: [{
+                model: models.Station
+            }]
+        }],
+    })
+        .then((result) => result.getRoutes())
+        .then((routes) => {
+            return Promise.all(
+                routes.map(route => {
+                    return route.getStation().then(t => t.dataValues);
+                })
+            ).catch(e => {
+                return [];
+            });
+        })
+        .then((stations) => {
+            res.json(stations);
+        });
 });
 
 function putCarsId() {

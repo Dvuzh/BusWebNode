@@ -1,7 +1,7 @@
 'use strict';
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return queryInterface.createTable('Route', {
+    return queryInterface.createTable('Routes', {
       id: {
         allowNull: false,
         autoIncrement: true,
@@ -9,7 +9,13 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       transportId: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        onDelete: "CASCADE",
+        references: {
+          model: 'Transports',
+          key: 'id'
+        }
       },
       stationId: {
         type: Sequelize.INTEGER
@@ -17,13 +23,13 @@ module.exports = {
       number: {
         type: Sequelize.INTEGER,
         allowNull: true,
-      },      
+      },
     },
-    {
-      timestamps: false
-    });
+      {
+        timestamps: false
+      });
   },
   down: (queryInterface, Sequelize) => {
-    return queryInterface.dropTable('Route');
+    return queryInterface.dropTable('Routes');
   }
 };
