@@ -97,9 +97,12 @@ router.get('/get-stations/?:id', function (req, res) {
     })
         .then((result) => result.getRoutes())
         .then((routes) => {
+
+            routes.sort((a, b) => { return a.direction - b.direction; });
+
             return Promise.all(
                 routes.map(route => {
-                    return route.getStation().then(t => t.dataValues);
+                    return route.getStation().then(t => {return  { "id" : t.dataValues.id,"name" : t.dataValues.name,"direction": route.direction}});
                 })
             ).catch(e => {
                 return [];

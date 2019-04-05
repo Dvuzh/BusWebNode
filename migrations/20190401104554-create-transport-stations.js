@@ -24,6 +24,10 @@ module.exports = {
         type: Sequelize.INTEGER,
         allowNull: true,
       },
+      direction: {
+        type: Sequelize.INTEGER,
+        allowNull: true,
+      }
     },
       {
         timestamps: false
