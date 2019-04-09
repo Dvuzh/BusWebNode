@@ -14,7 +14,7 @@ let carsId = [];
 router.get('/buses', function (req, res, next) {
     let buses = [];
 
-    Transport.findAll({
+    models.Transport.findAll({
         attributes: ['id', 'num', 'directionOne', 'directionTwo', 'type'],
         where: {
             type: 0
@@ -32,7 +32,7 @@ router.get('/buses', function (req, res, next) {
 router.get('/trams', function (req, res, next) {
     let trams = [];
 
-    Transport.findAll({
+    models.Transport.findAll({
         attributes: ['id', 'num', 'directionOne', 'directionTwo', 'type'],
         where: {
             type: 1
@@ -50,7 +50,7 @@ router.get('/trams', function (req, res, next) {
 router.get('/trolleys', function (req, res, next) {
     let trolleys = [];
 
-    Transport.findAll({
+    models.Transport.findAll({
         attributes: ['id', 'num', 'directionOne', 'directionTwo', 'type'],
         where: {
             type: 2
@@ -66,7 +66,7 @@ router.get('/trolleys', function (req, res, next) {
 });
 
 router.get('/amount', function (req, res, next) {
-    Transport.sum('directionOne').then(amountDirectionOne => {
+    models.Transport.sum('directionOne').then(amountDirectionOne => {
         Transport.sum('directionTwo').then(amountDirectionTwo => {
             const amountTransposrt = amountDirectionOne + amountDirectionTwo;
             res.json({
