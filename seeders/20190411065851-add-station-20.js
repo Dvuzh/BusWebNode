@@ -4,48 +4,36 @@ module.exports = {
   up: (queryInterface, Sequelize) => {
 
     return queryInterface.bulkInsert('Stations',
-
-
-
-      [{ "id": 7445, "name": "Рождественского" }, { "id": 8759, "name": "Ж/д вокзал" },
-      { "id": 7731, "name": "Цирк" },
-      { "id": 8758, "name": "Ж/д вокзал" }, { "id": 7435, "name": "Рождественского" }, { "id": 7735, "name": "пл. Серова" }, { "id": 8287, "name": "Хлебозавод (проспект Карла Маркса)" }, { "id": 7736, "name": "Цирк" },
-      { "id": 7737, "name": "Дом печати" }, { "id": 7738, "name": "Академия транспорта" }, { "id": 7410, "name": "Магазин Голубой огонек" },
-      { "id": 7728, "name": "Магазин Голубой огонек" },
-      { "id": 7411, "name": "Магазин Детский Мир" }, { "id": 7694, "name": "пл. Ленина" }, 
-      
-      
-       { "id": 7594, "name": "Дворец творчества" }, { "id": 7595, "name": "Аграрный университет" }, { "id": 7596, "name": "Телецентр" },
-     
-      { "id": 7421, "name": "пл. Ленина" },
-
-       { "id": 7729, "name": "Академия транспорта" },
-      { "id": 7732, "name": "пл. Серова" },
-      { "id": 7730, "name": "Дом печати" },
-      { "id": 8605, "name": "Магазин Юный техник" },{ "id": 8293, "name": "Хлебозавод (проспект Карла Маркса)" },
-      
-      
-      { "id": 7609, "name": "Телецентр" }, { "id": 7610, "name": "Аграрный университет" }, { "id": 7611, "name": "Дворец творчества" },
-       
-      {"id":8756,"name":"Завод им. Попова"}, {"id":8757,"name":"Завод им. Попова"}
-
-      // ["7380", "7381", "7382", "7383", "7384", "7385", "7652", "7653", "7654", "7655", "7656", "7657", "7658", "7659", "7660", "7458", "7690", "7691", 
-      // "7692", "7693", 
-      //  "8074", "8075", "8076", "8077", "8078", "8079", "8080", "7852", "7577", 
-      //    "8065", "8066", "8067", "8068", "8069", "8070", 
-        
-      //   "7709", "7710", "7711", "7712", "7499", "7644", "7645", "7646", "7647", "7648", "7649"
-
-      //   100: "7650"
-      //   101: "7651"
-      //   102: "7373"
-      //   103: "7374"
-      //   104: "7375"
-      //   105: "7376"
-      //   106: "7377"
-      //   107: "7378"
-      //   108: "7379"
-        ]      , {});
+      [
+        { id: 7445, name: "Rozhdestvenskogo" },
+        { id: 8759, name: "Zh/d vokzal" },
+        { id: 7731, name: "Cirk" },
+        { id: 8758, name: "Zh/d vokzal" },
+        { id: 7435, name: "Rozhdestvenskogo" },
+        { id: 7735, name: "pl. Serova" },
+        { id: 8287, name: "Hlebozavod (prospekt Karla Marksa)" },
+        { id: 7736, name: "Cirk" },
+        { id: 7737, name: "Dom pechati" },
+        { id: 7738, name: "Akademiya transporta" },
+        { id: 7410, name: "Magazin Goluboj ogonek" },
+        { id: 7728, name: "Magazin Goluboj ogonek" },
+        { id: 7411, name: "Magazin Detskij Mir" },
+        { id: 7694, name: "pl. Lenina" },
+        { id: 7594, name: "Dvorec tvorchestva" },
+        { id: 7595, name: "Agrarnyj universitet" },
+        { id: 7596, name: "Telecentr" },
+        { id: 7421, name: "pl. Lenina" },
+        { id: 7729, name: "Akademiya transporta" },
+        { id: 7732, name: "pl. Serova" },
+        { id: 7730, name: "Dom pechati" },
+        { id: 8605, name: "Magazin Yunyj tehnik" },
+        { id: 8293, name: "Hlebozavod (prospekt Karla Marksa)" },
+        { id: 7609, name: "Telecentr" },
+        { id: 7610, name: "Agrarnyj universitet" },
+        { id: 7611, name: "Dvorec tvorchestva" },
+        { id: 8756, name: "Zavod im. Popova" },
+        { id: 8757, name: "Zavod im. Popova" },
+      ], {});
   },
 
   down: (queryInterface, Sequelize) => {
