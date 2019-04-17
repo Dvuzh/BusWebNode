@@ -14,6 +14,8 @@ module.exports = (sequelize, DataTypes) => {
     // Route.belongsTo(models.Transport,{foreignKey: 'transportId'});
 
     Route.belongsTo(models.Station);
+
+    Route.belongsTo(models.Transport);
   };
   return Route;
 };
